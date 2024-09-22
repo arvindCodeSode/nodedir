@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use Illuminate\Http\Request;
+use App\Models\Payment;
+use App\Models\Account;
+use App\Http\Controllers\Controller;
+use Validator;
+
+class PaymentController extends Controller
+{
+  public function store(Request $request)
+  {
+        #write your code for payment creation here...
+        #model name = Payment
+        #table name = payments
+        #table fields = id,account,amount
+        #all fields are required
+        if( empty($request->account)  )
+        {
+            return response()->json(['errMsg'=>'MandatoryFieldsNotComplete'],400);
+        }
+        if( empty($request->amount)  )
+        {
+            return response()->json(['errMsg'=>'MandatoryFieldsNotComplete'],400);
+
+        }
+        $account = Account::find($request->account);
+        if(!$account)
+        {
+          return response()->json([
+          ],404);
+        }
+        $payment =  New Payment();
+        $payment->amount = $request->amount;
+        $payment->account=$request->account;
+
+        $save  = $payment->save();
+        if( $save )
+        {
+          return response()->json($payment,201);
+        }
+        else{
+          return response()->json([
+            'status'=>false,
+              'message'=>'Some Unknown error, please try again',
+          ],400);
+
+        }
+  }
+}

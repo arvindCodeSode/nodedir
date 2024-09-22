@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Account;
+
+class AccountController extends Controller
+{
+    public function store(Request $request)
+    {
+        #write your code for account creation here...
+        #model name = Account
+        #table name = accounts
+        #table fields = id,balance
+        #all fields are required
+    
+        $account =  New Account();
+        $account->balance = 2233;
+        $save  = $account->save();
+        if( $save )
+        {
+          return response()->json($account,201);
+        }
+        else{
+          return response()->json([
+            'status'=>false,
+              'message'=>'Some Unknown error, please try again',
+          ],400);
+
+        }
+    }
+
+    public function get($id)
+    {
+        #write your code to get account details...
+        #model name = Account
+        #table name = accounts
+        #table fields = id,balance
+        $accounts = Account::find($id);
+        if($accounts)
+        {
+            return response()->json($accounts,200);
+        }else{
+          return response()->json([],404);
+        }
+    }
+}
